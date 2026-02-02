@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Username Randomizer</title>
+    <title>o.o</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100..700&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Roboto Mono', monospace;
@@ -21,11 +23,13 @@
             box-sizing: border-box;
             color: #5d4037;
         }
+
         .container {
             display: flex;
             justify-content: center;
             margin-top: 30px;
         }
+
         .randomizer-box {
             background: #ffffff;
             padding: 40px;
@@ -35,101 +39,99 @@
             min-width: 300px;
             border: 1px solid #f8bbd0;
         }
+
         h1 {
             font-weight: 400;
             color: #880e4f;
         }
+
         .username-display {
             font-size: 1.5rem;
             font-weight: 300;
-            margin: 0;
             color: #ad1457;
         }
+
         button {
             font-family: 'Roboto Mono', monospace;
-            font-weight: 400;
             padding: 10px 20px;
             background-color: #f8bbd0;
             color: #880e4f;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-        button:hover {
-            background-color: #f48fb1;
-        }
-        #main-randomize-btn {
-            font-size: 1.1rem;
-            padding: 15px 30px;
-        }
-        #confirm-btn {
-            font-size: 1.1rem;
-            padding: 15px 30px;
-            background-color: #e1bee7;
-            color: #4a148c;
-        }
-        #confirm-btn:hover {
-            background-color: #ce93d8;
-        }
+
         .button-group {
             display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
             gap: 15px;
             margin-top: 30px;
         }
+
         .page {
             display: none;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
+
         .page.active {
             display: flex;
         }
-        #symbol-display {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        .final-result {
-            font-size: 1.2rem;
-            margin-top: 20px;
-            color: #880e4f;
+
+        .caption {
+            font-size: 0.9rem;
+            color: #ad1457;
+            margin-top: 15px;
+            font-style: italic;
+            text-align: center;
+            max-width: 500px;
         }
     </style>
 </head>
+
 <body>
+
+    <!-- PAGE 1 -->
     <div id="page1" class="page active">
-        <h1>your fairy username </h1>
+        <h1>your fairy username</h1>
+
         <div class="container">
             <div class="randomizer-box">
                 <div class="username-display" id="display-main">---</div>
             </div>
         </div>
+
+        <p class="caption" id="main-caption">
+           this is my reflecion:  i used chatgpt for the individual randomizer componeneets codes, not necessarily for the whole script.
+            afterwards i did a lot of editing but kept the weird generated functions which iv'e commented on in the code. not sure why chatgpgt decided to include it. I think that chatgpt is generally useful to get started with your code and for troubleshooting but understanding the code itself is as crucial since you would need basic knowledge to know how to fix chat's mistakes. also, chatgpt tends to write very verbose code so i had to condense a lot of it.
+        </p>
+
         <div class="button-group">
-            <button id="main-randomize-btn" onclick="randomizeAll()">Roll</button>
-            <button id="confirm-btn" onclick="confirmUsername()">Confirm</button>
+            <button id="main-randomize-btn">Roll</button>
+            <button id="confirm-btn">Confirm</button>
         </div>
     </div>
 
+    <!-- PAGE 2 -->
     <div id="page2" class="page">
-        <h1>your fairy symbol </h1>
+        <h1>your fairy symbol</h1>
+
         <div class="container">
             <div class="randomizer-box">
-                <div id="symbol-display" style="min-height: 3.5rem;"></div>
-                <div id="symbol-name" style="font-size: 0.9rem; color: #ad1457; min-height: 1.2rem;"></div>
+                <div id="symbol-display" style="font-size:2.5rem;"></div>
+                <div id="symbol-name" style="font-size:0.9rem; color:#ad1457;"></div>
             </div>
         </div>
-        <div class="final-result" id="final-username-display"></div>
+
+        <div id="final-username-display" style="margin-top:20px;"></div>
+
         <div class="button-group">
-            <button id="roll-symbol-btn" onclick="randomizeSymbol()">Roll Symbol</button>
-            <button id="back-btn" onclick="showPage(1)" style="background-color: #fce4ec; border: 1px solid #f8bbd0;">Back</button>
+            <button id="roll-symbol-btn">Roll Symbol</button>
+            <button id="back-btn">Back</button>
         </div>
     </div>
 
     <script>
+        /* DATA */
         const cuteWords = ["love", "angel", "pretty", "sweet", "honey", "cloud", "star", "bloom", "petal", "dream"];
         const symbols = [
             { char: "⋆˚꩜｡", name: "wind" },
@@ -139,38 +141,55 @@
             { char: "☘︎ ݁˖", name: "luck" },
             { char: "˚ʚ♡ɞ˚", name: "love" }
         ];
-        
-        let chosenUsername = "";
 
-        function showPage(pageId) { //this was chatgpt 
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(`page${pageId}`).classList.add('active'); //this was chatgpt 
+        let chosenUsername = "";
+        let rollCount = 0;
+
+        function showPage(pageId) { // this was chatgpt
+            document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+            document.getElementById(`page${pageId}`).classList.add("active");
         }
 
-        function randomizeAll() {
+        function randomizeAll() { // this was chatgpt (edited)
+            rollCount++;
             const num = Math.floor(Math.random() * 100) + 1;
             const cute1 = cuteWords[Math.floor(Math.random() * cuteWords.length)];
             const cute2 = cuteWords[Math.floor(Math.random() * cuteWords.length)];
-            
-            document.getElementById('display-main').innerText = `${cute1}${cute2}${num}`; //this was chatgpt 
+
+            document.getElementById("display-main").innerText = `${cute1}${cute2}${num}`;
+            document.getElementById("main-caption").innerText += ` (JS rolls: ${rollCount})`; // idk why chatgpt included this 
         }
 
-        function confirmUsername() { //this was chatgpt 
-            const username = document.getElementById('display-main').innerText;
+        function confirmUsername() { // this was chatgpt
+            const username = document.getElementById("display-main").innerText;
             if (username !== "---") {
                 chosenUsername = username;
-                document.getElementById('final-username-display').innerText = `username: ${chosenUsername}`;
+                document.getElementById("final-username-display").innerText =
+                    `username: ${chosenUsername}`;
                 showPage(2);
             } else {
-                alert("Please roll for a username first!");//this was chatgpt 
+                alert("Please roll for a username first!"); // this was chatgpt
             }
         }
 
-        function randomizeSymbol() {//this was chatgpt 
+        function randomizeSymbol() { // this was chatgpt
             const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-            document.getElementById('symbol-display').innerText = randomSymbol.char;
-            document.getElementById('symbol-name').innerText = randomSymbol.name;//this was chatgpt 
+            document.getElementById("symbol-display").innerText = randomSymbol.char;
+            document.getElementById("symbol-name").innerText = randomSymbol.name;
         }
+
+        document.getElementById("main-randomize-btn")
+            .addEventListener("click", randomizeAll);
+
+        document.getElementById("confirm-btn")
+            .addEventListener("click", confirmUsername);
+
+        document.getElementById("roll-symbol-btn")
+            .addEventListener("click", randomizeSymbol);
+
+        document.getElementById("back-btn")
+            .addEventListener("click", () => showPage(1));
     </script>
+
 </body>
 </html>
